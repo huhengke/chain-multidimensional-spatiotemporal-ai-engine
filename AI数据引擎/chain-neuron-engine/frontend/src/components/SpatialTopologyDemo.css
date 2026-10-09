@@ -1,0 +1,104 @@
+.wisdom-topology {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.wisdom-toolbar {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wisdom-route-strip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  padding: 8px;
+  border: 1px solid #dfe6ee;
+  background: #f8fafc;
+  font-size: 12px;
+}
+
+.wisdom-route-strip span {
+  flex: none;
+  padding: 4px 7px;
+  border: 1px solid #d8e0e8;
+  border-radius: 4px;
+  background: #fff;
+  color: #53677b;
+}
+
+.wisdom-route-strip span + span::before {
+  content: "↑";
+  margin-right: 8px;
+  color: #8a9bac;
+}
+
+.wisdom-route-strip span.active {
+  border-color: #8bbbe7;
+  background: #edf6ff;
+  color: #1e5f97;
+}
+
+.wisdom-loading {
+  min-height: 360px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+}
+
+.wisdom-canvas-scroll {
+  width: 100%;
+  min-height: 600px;
+  overflow: auto;
+  border: 1px solid #dce4ec;
+  background: #fbfdff;
+}
+
+.wisdom-canvas {
+  display: block;
+  width: max(100%, 1120px);
+  min-width: 1120px;
+  height: auto;
+  min-height: 740px;
+}
+
+.wisdom-node { cursor: pointer; }
+.wisdom-node:hover rect { filter: brightness(1.06); stroke: #263f57; }
+.wisdom-tree.empty { opacity: 0.5; }
+
+.wisdom-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 9px 11px;
+  border: 1px solid #dfe6ee;
+  background: #fff;
+  color: #53677b;
+  font-size: 12px;
+}
+
+.wisdom-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wisdom-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+@media (max-width: 760px) {
+  .wisdom-toolbar { align-items: flex-start; }
+  .wisdom-canvas-scroll { min-height: 520px; }
+  .wisdom-legend { flex-direction: column; }
+}

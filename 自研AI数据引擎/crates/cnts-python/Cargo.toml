@@ -1,0 +1,17 @@
+[package]
+name = "cnts-python"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "_native"
+crate-type = ["cdylib"]
+
+[dependencies]
+chrono.workspace = true
+cnts-format = { path = "../cnts-format" }
+cnts-query = { path = "../cnts-query" }
+pyo3.workspace = true
+serde_json.workspace = true
+uuid.workspace = true

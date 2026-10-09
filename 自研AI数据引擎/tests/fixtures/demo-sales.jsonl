@@ -1,0 +1,12 @@
+{"date":"2026-08-01","company":"示例区域甲","category":"类别甲","sales_amount":"100.00","sales_volume":"10.000"}
+{"date":"2026-08-01","company":"示例区域甲","category":"类别乙","sales_amount":"200.00","sales_volume":"20.000"}
+{"date":"2026-08-01","company":"示例区域丁","category":"类别甲","sales_amount":"150.00","sales_volume":"15.000"}
+{"date":"2026-08-01","company":"示例区域丁","category":"类别乙","sales_amount":"250.00","sales_volume":"25.000"}
+{"date":"2026-08-02","company":"示例区域甲","category":"类别甲","sales_amount":"110.00","sales_volume":"11.000"}
+{"date":"2026-08-02","company":"示例区域甲","category":"类别乙","sales_amount":"210.00","sales_volume":"21.000"}
+{"date":"2026-08-02","company":"示例区域丁","category":"类别甲","sales_amount":"160.00","sales_volume":"16.000"}
+{"date":"2026-08-02","company":"示例区域丁","category":"类别乙","sales_amount":"260.00","sales_volume":"26.000"}
+{"date":"2026-08-03","company":"示例区域甲","category":"类别甲","sales_amount":"120.00","sales_volume":"12.000"}
+{"date":"2026-08-03","company":"示例区域甲","category":"类别乙","sales_amount":"220.00","sales_volume":"22.000"}
+{"date":"2026-08-03","company":"示例区域丁","category":"类别甲","sales_amount":"170.00","sales_volume":"17.000"}
+{"date":"2026-08-03","company":"示例区域丁","category":"类别乙","sales_amount":"270.00","sales_volume":"27.000"}

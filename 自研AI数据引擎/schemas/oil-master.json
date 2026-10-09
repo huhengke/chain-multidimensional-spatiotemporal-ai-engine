@@ -1,0 +1,30 @@
+{
+  "dataset_id": "oil_master",
+  "kind": "dimension",
+  "schema_major": 1,
+  "primary_key": "material_code",
+  "columns": [
+    "type_code",
+    "type_name",
+    "material_class",
+    "material_class_name",
+    "material_class_alias",
+    "material_code",
+    "material_name",
+    "material_alias",
+    "material_index",
+    "state",
+    "plu_no",
+    "material_dept",
+    "extend1",
+    "extend2"
+  ],
+  "semantic_indexes": {
+    "category_code": "type_code",
+    "category_name": "type_name",
+    "product_code": "material_code",
+    "product_name": "material_name",
+    "category_alias": "material_class_alias",
+    "product_alias": "material_alias"
+  }
+}

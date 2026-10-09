@@ -1,0 +1,28 @@
+{
+  "name": "chain-neuron-agent-gateway",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DeepSeek Harness Agent Gateway for the Chain Neuron AI Data Engine",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "check:profile": "node src/check-profile.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "busboy": "1.6.0",
+    "cheerio": "1.2.0",
+    "mammoth": "1.13.0",
+    "pdfjs-dist": "6.3.289",
+    "word-extractor": "1.0.4",
+    "xlsx": "0.18.5",
+    "yauzl": "3.4.0"
+  },
+  "optionalDependencies": {
+    "@napi-rs/canvas": "1.0.10"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

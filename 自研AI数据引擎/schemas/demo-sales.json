@@ -1,0 +1,14 @@
+{
+  "dataset_id": "demo_sales",
+  "schema_major": 1,
+  "time_field": "date",
+  "time_format": "%Y-%m-%d",
+  "common_dimensions": ["company"],
+  "outer_dimensions": ["category"],
+  "growth_dimensions": ["company"],
+  "growth_threshold": 2,
+  "metrics": [
+    {"name": "sales_amount", "scale": 2, "unit": "CNY"},
+    {"name": "sales_volume", "scale": 3, "unit": "ton"}
+  ]
+}

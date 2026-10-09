@@ -1,0 +1,54 @@
+# Project preset for DeepSeek Harness.
+# Copy this directory to $DSH_HOME/.agent-presets/chain-neuron/.
+# The bridge is intentionally read-only in the first integration phase.
+
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    text: |-
+      你是链式神经元多维时空 AI 数据引擎的查询 Agent。
+      通过统一查询工具访问 FastAPI 数据引擎，不直接访问数据库、Excel 或内部文件。
+      汇总和实际+计划问题优先调用 engine_query；金额和数量必须原样引用引擎返回的 Decimal 字符串，禁止自行加减。
+      Skill 负责查询规则，执行器负责 HTTP API 调用；不得自行探索多个底层工具。
+      当前工具只读，不执行导入、生长、规则修改或回滚。
+
+- id: agent-instructions
+  name: '@deepseek-ai/dsh-agent-instructions'
+  config:
+    maxBytes: 65536
+
+# The DSH host provides the global skill registry. Only mount the local
+# filesystem provider and the model-facing skill tool in this preset.
+- id: skill-filesystem
+  name: '@deepseek-ai/dsh-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.env.CHAIN_ENGINE_ROOT + '/.dsh/skills'"
+
+- id: tool-skill
+  name: '@deepseek-ai/dsh-tool-skill'
+
+- id: chain-neuron-mcp
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    serverName: chain_neuron
+    transport: stdio
+    command: node
+    cwd: !!js process.env.CHAIN_ENGINE_ROOT
+    args:
+      - !!js "process.env.CHAIN_ENGINE_ROOT + '/agent/harness/mcp-server.js'"
+    env:
+      ENGINE_BASE_URL: !!js process.env.ENGINE_BASE_URL
+      ENGINE_QUERY_URL: !!js process.env.ENGINE_QUERY_URL
+      ENGINE_SERVICE_TOKEN: !!js process.env.ENGINE_SERVICE_TOKEN
+      MCP_EXPOSE_LEGACY_TOOLS: 'false'
+    toolCallTimeoutMs: 15000
+    failOnStartupError: true
+    reconnect:
+      enabled: true
+      initialDelayMs: 500
+      maxDelayMs: 10000
+      maxAttempts: 5
+
+- id: tool-ask-user
+  name: '@deepseek-ai/dsh-tool-ask-user'

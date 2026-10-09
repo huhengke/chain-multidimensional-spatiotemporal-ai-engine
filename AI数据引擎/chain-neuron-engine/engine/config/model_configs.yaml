@@ -1,0 +1,38 @@
+# 模型供应配置元数据（真实密钥不写入项目，Codex 优先读取本地认证或环境变量）
+version: 1
+active: codex_openai
+providers:
+  - id: codex_openai
+    provider: openai_codex
+    name: Codex Responses
+    purpose: [profile, propose, clarify, chat]
+    base_url_env: CODEX_BASE_URL
+    default_base_url: http://sub2.deepermobile.cn:8080
+    model_env: CODEX_MODEL
+    default_model: gpt-5.6-luna
+    api_key_env: OPENAI_API_KEY
+    auth_file_env: CODEX_AUTH_FILE
+    protocol: responses
+    supports_images: true
+    timeout_seconds: 60
+  - id: deepseek_harness
+    provider: deepseek
+    purpose: [profile, propose, clarify, chat]
+    base_url_env: DEEPSEEK_BASE_URL
+    default_base_url: https://api.deepseek.com
+    model_env: DEEPSEEK_MODEL
+    default_model: deepseek-chat
+    api_key_env: DEEPSEEK_API_KEY
+    protocol: openai-compatible
+    supports_images: false
+    timeout_seconds: 60
+  - id: ollama_local
+    provider: ollama
+    purpose: [profile, propose, clarify, chat]
+    base_url_env: OLLAMA_BASE_URL
+    default_base_url: http://127.0.0.1:11434
+    model_env: OLLAMA_MODEL
+    default_model: deepseek-v4.1-flash
+    protocol: ollama
+    supports_images: false
+    timeout_seconds: 60

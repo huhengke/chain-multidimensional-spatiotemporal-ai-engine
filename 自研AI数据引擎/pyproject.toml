@@ -1,0 +1,23 @@
+[build-system]
+requires = ["maturin>=1.8,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "cnts-engine"
+version = "0.1.0"
+description = "Isolated CNTS native wisdom-tree engine"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[tool.maturin]
+manifest-path = "crates/cnts-python/Cargo.toml"
+python-source = "python"
+module-name = "cnts_engine._native"
+features = ["pyo3/extension-module"]
+
+[tool.pytest.ini_options]
+pythonpath = ["python"]
+testpaths = ["tests"]

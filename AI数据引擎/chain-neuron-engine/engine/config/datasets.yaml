@@ -1,0 +1,45 @@
+# 数据集注册表（单一事实来源）
+#
+# kind:
+#   generic   —— 通用事实数据。基座配置与界面注册均使用这一类型；
+#   dimension —— 维表/主数据，不建螺旋节点、不参与聚合，仅建独立维表供浏览。
+#
+# 来源由注册表按文件层级判定：本文件中的声明是 source_origin=base，
+# data/datasets_custom.yaml 中的声明是 source_origin=interface。
+#
+# 所有字段、层级和指标均由注册声明驱动；不保留专用 ORM/Mapper 管线。
+version: 1
+datasets:
+  # ---------------- 维表/主数据：示例产品基础信息 ----------------
+  - id: oil_master
+    kind: dimension
+    label: 示例产品基础信息
+    dim_table: dim_oil_master
+    primary_key: MaterialCode
+    source_file: 示例产品基础信息.xlsx
+    base:
+      enabled: true
+      features:
+        - {source: TypeCode, name: type_code, label: 类别编码, semantic_type: category}
+        - {source: TypeName, name: type_name, label: 类别名称, semantic_type: category}
+        - {source: MaterialClass, name: material_class, label: 物料分类编码, semantic_type: product_code}
+        - {source: MaterialClassName, name: material_class_name, label: 物料分类名称, semantic_type: product_name}
+        - {source: MaterialClassAliasName, name: material_class_alias, label: 分类别名, semantic_type: alias}
+        - {source: MaterialCode, name: material_code, label: 物料编码, semantic_type: product_code}
+        - {source: MaterialName, name: material_name, label: 物料名称, semantic_type: product_name}
+        - {source: MaterialAliasName, name: material_alias, label: 物料别名, semantic_type: alias}
+    columns:
+      - {source: TypeCode, name: type_code, label: 类别编码}
+      - {source: TypeName, name: type_name, label: 类别名称}
+      - {source: MaterialClass, name: material_class, label: 物料分类编码}
+      - {source: MaterialClassName, name: material_class_name, label: 物料分类名称}
+      - {source: MaterialClassAliasName, name: material_class_alias, label: 分类别名}
+      - {source: MaterialCode, name: material_code, label: 物料编码}
+      - {source: MaterialName, name: material_name, label: 物料名称}
+      - {source: MaterialAliasName, name: material_alias, label: 物料别名}
+      - {source: MaterialIndex, name: material_index, label: 物料序号}
+      - {source: State, name: state, label: 状态}
+      - {source: PLUNo, name: plu_no, label: PLU 编码}
+      - {source: MaterialDept, name: material_dept, label: 物料部门}
+      - {source: Extend1, name: extend1, label: 扩展1}
+      - {source: Extend2, name: extend2, label: 扩展2}

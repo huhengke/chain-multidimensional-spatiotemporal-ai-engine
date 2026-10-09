@@ -1,0 +1,15 @@
+{
+  "name": "chain-neuron-harness",
+  "version": "1.0.0",
+  "private": true,
+  "description": "链式神经元引擎的项目 Agent 与 DeepSeek Harness MCP 适配层",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:mcp": "node mcp-server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

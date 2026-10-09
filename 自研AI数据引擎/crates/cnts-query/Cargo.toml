@@ -1,0 +1,14 @@
+[package]
+name = "cnts-query"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono.workspace = true
+cnts-format = { path = "../cnts-format" }
+serde_json.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+cnts-builder = { path = "../cnts-builder" }

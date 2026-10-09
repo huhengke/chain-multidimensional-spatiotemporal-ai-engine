@@ -1,0 +1,457 @@
+# AI 字段分析常用推荐库
+#
+# 这是项目经验资产，不属于业务数据：注销数据集、清空业务表和重初始化均不得删除本文件。
+# 修正推荐时追加新 revision 或将旧条目标记为 retired，不复用 id、不物理删除历史条目。
+version: 2
+catalog: ai_field_recommendations
+updated_at: 2026-10-03
+# 查询经验与字段推荐共用此版本化资产；业务数据注销、清库和重初始化不得删除。
+# 这些规则是查询规划建议，不替代注册数据集声明，也不直接修改事实表。
+base_semantics:
+  version: 1
+  principle: 基座只负责语义过滤、翻译、归一化、纠偏和派生条件，不承载原始时间序列，也不替代事实数据集字段。
+  field_layer_policy:
+    time: 时间字段默认进入通用事实的中通主干；只有用户确认其具备公共语义翻译价值时，才允许额外复用到基座。
+    dimension: 普通维度默认进入中通主干；产品、组织、类别和别名只有在经验库或 AI 明确建议且人工确认后才进入基座。
+    metric: 指标默认进入中通分枝，不得作为基座过滤字段。
+    ignore: 空字段、技术字段和审计字段默认不进入任何结构层。
+  semantic_translation:
+    purpose: 将自然语言中的业务概念转换为注册数据集能够执行的标准条件或值集合。
+    time_period:
+      examples: [上半年, 下半年, 春季, 夏季, 秋季, 冬季, 双十一, 黑色星期五, 超级星期六, 春节, 端午节, 国庆]
+      rule: 时间字段仍由通用事实主干承载；上述词语由基座翻译为月份集合、日历映射或数据集声明的季节值。
+    product_alias:
+      examples: [类别甲, 类别乙, 类别代码甲, 类别代码丙, 类别代码丁]
+      rule: 基座优先通过已确认的产品编码、产品名称、类别和别名特征完成纠偏与多值映射，不把行业字段名称硬编码为查询层级。
+    comparison:
+      yoy: 当前期间与上一年度同一期间比较；例如 2026年5月对比 2025年5月。
+      mom: 当前期间与紧邻上一个期间比较；例如 2026年5月对比 2026年4月。
+      completion_rate: 实际值除以计划值；分母为零或缺失时返回不可计算并保留审计告警。
+  dataset_scope:
+    actual_sales:
+      include_kinds: [generic]
+      exclude_terms: [计划, 指标, 预算, plan]
+      rule: 未明确指定业务类型时，“业务”查询覆盖当前启用的全部通用事实数据集；维表/主数据和计划类数据不自动纳入。
+      rationale: 新数据集注册后只要声明为通用事实并通过启用状态校验，即可自动进入跨数据集业务查询。
+  time_comparisons:
+    yoy:
+      label: 同比
+      definition: 当前期间与上一年度同一期间比较；2026年5月的同比基准是2025年5月。
+      shift: {years: -1, months: 0}
+      output: 当前值、同比基准值、差额和变化率。
+    mom:
+      label: 环比
+      definition: 当前期间与紧邻上一个期间比较；2026年5月的环比基准是2026年4月。
+      shift: {years: 0, months: -1}
+      output: 当前值、环比基准值、差额和变化率。
+  common_relative_periods:
+    本周:
+      kind: week
+      definition: 当前自然周周一至今天；当前日期为 2026-09-28 时，本周从 2026-09-28 开始。
+      layer: foundation_translation
+      target: trunk_time_range
+    上周:
+      kind: week
+      definition: 上一完整自然周，按周一至周日计算；当前日期为 2026-09-28 时，上周为 2026-09-21 至 2026-09-27。
+      layer: foundation_translation
+      target: trunk_time_range
+    本月:
+      kind: month
+      definition: 当月第一天至今天。
+      layer: foundation_translation
+      target: trunk_time_range
+    上月:
+      kind: month
+      definition: 上一完整自然月。
+      layer: foundation_translation
+      target: trunk_time_range
+    selection_rule:
+      rule: 只从数据集声明的 canonical_time 时间入口中选择字段；不能把组织、商品、记录、指标或审计字段作为上周/本周候选。
+      precision: 只有 yyyymmdd 或 d/m/yyyy 日粒度才能精确执行周范围；yyyymm/yyyy-mm 只能回答月粒度，必须提示能力不足。
+      default: 相对时间语义默认由基座翻译，原始时间字段默认进入中通主干，不写入基座 dataset_bindings。
+  time_query_contract:
+    raw_time_owner: trunk
+    semantic_translator: foundation
+    comparison_rule: 同比使用上一年度相同日期范围，环比使用紧邻上一完整同粒度范围；周查询的环比是上一周，不是上一月。
+    audit_required: true
+  business_aggregates:
+    oil_machine_output:
+      label: 指定类别合计
+      aliases: [指定类别合计, 指定类别合计, 指定类别合计业务数量]
+      datasets: [oil_sales_daily]
+      metric: salesvol
+      components:
+        - {label: 类别甲, base_filter: {product: 类别甲}, compiled_condition: {category: '01'}}
+        - {label: 类别乙, base_filter: {product: 类别乙}, compiled_condition: {category: '02'}}
+      combined_base_filter: {product: [类别甲, 类别乙]}
+      combined_condition: {category: ['01', '02']}
+      rule: 指定类别合计只汇总类别甲与类别乙；类别丁、类别戊和空分类不自动纳入。必须由引擎在相同时间、组织及其他条件下聚合，模型不得使用未过滤的全品类总额或自行加减。
+      source: project_experience
+      status: active
+      added_at: 2026-10-03
+      revision: 1
+  semantic_filters:
+    location:
+      slot: organization
+      semantic_types: [org_name, org_code]
+      rule: 地点语义先进入通用基座，再在每个目标数据集声明的组织名称/组织编码特征中解析为实际值；不得把示例区域甲固定映射为某个行业字段。
+      example: 示例区域甲可分别解析为产品数据集的示例区域甲组织层级一，以及业务域乙数据集声明的示例区域甲组织/地域值。
+      rationale: 同一个自然语言地点在不同数据集的物理字段和编码可能不同，必须按数据集特征契约分别翻译。
+entries:
+  - id: time-month
+    aliases: [Month, Monthly, month, yyyymm, 年月, 月份, 统计年月, 业务月份]
+    role: time
+    semantic_type: time
+    base_candidate: false
+    feature_layer: trunk
+    query_uses: [filter, group_by, compare]
+    scopes: [generic]
+    confidence: 0.99
+    rationale: 月度年月字段是通用事实的主干时间入口，可派生年、月、季度和季节；不要因可派生时间语义而自动进入基座。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: time-date
+    aliases: [Date, date, 日期, 业务日期, 发生日期, 交易日期, 业务日期, 时间]
+    role: time
+    semantic_type: time
+    base_candidate: false
+    feature_layer: trunk
+    query_uses: [filter, group_by, compare]
+    scopes: [generic]
+    confidence: 0.98
+    rationale: 日期字段是通用事实的主干时间入口；节日和自定义日历属于基座翻译规则，不等于原始日期字段本身是基座特征。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: time-relative-period
+    aliases: [本周, 上周, 下周, 本月, 上月, 下月, 同比, 环比, 日均, 工作日]
+    role: time
+    semantic_type: time
+    base_candidate: false
+    feature_layer: trunk
+    query_uses: [filter, compare]
+    scopes: [generic]
+    confidence: 0.99
+    rationale: 这些是基座翻译语义，不是事实表字段；只绑定数据集声明的 canonical_time 字段，并把结果编译为中通主干可执行日期范围。
+    source: project_experience
+    status: active
+    added_at: 2026-09-28
+    revision: 2
+
+  - id: product-code
+    aliases: [GasCode, Gas_Code, MaterialCode, Material_Code, MaterialNo, ProductCode, 商品编码, 产品编码, 物料编码, 产品编码]
+    role: dimension
+    semantic_type: product_code
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.99
+    rationale: 编码字段用于产品/产品基座翻译、过滤和交叉映射。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: product-name
+    aliases: [GasName, MaterialName, ProductName, 商品名称, 产品名称, 物料名称, 产品名称]
+    role: dimension
+    semantic_type: product_name
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.97
+    rationale: 名称字段用于用户语义识别和编码映射的可解释证据。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: product-alias
+    aliases: [MaterialAliasName, Material_Alias_Name, ProductAlias, Alias, 别名, 商品别名, 产品别名, 物料别名]
+    role: dimension
+    semantic_type: alias
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.95
+    rationale: 别名字段用于自然语言纠偏和多名称映射。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: product-category
+    aliases: [Category, TypeName, MaterialClassName, ProductCategory, 商品类别, 产品类别, 物料分类名称, 品类, 分类]
+    role: dimension
+    semantic_type: category
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.96
+    rationale: 类别字段用于产品大类过滤，例如将类别甲翻译为多个具体类别代码编码。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: product-category-code
+    aliases: [TypeCode, MaterialClass, ProductCategoryCode, 类别编码, 物料分类编码, 品类编码]
+    role: dimension
+    semantic_type: category
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.95
+    rationale: 类别编码是稳定的基座过滤键，需与类别名称和别名共同解释。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: organization-code
+    aliases: [OUCode, UnitCode, OrgCode, BranchCode, StoreID, StoreId, UniversalCode, OrganizationCode, 组织编码, 机构编码, 公司编码, 定位单元编码, 服务单元编码]
+    role: dimension
+    semantic_type: org_code
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.94
+    rationale: 组织和定位单元编码适合作为组织基座过滤及层级翻译依据。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: organization-name
+    aliases: [OUName, UnitName, OrgName, BranchName, AreaName, StoreName, ShortName, OrganizationName, 组织名称, 机构名称, 公司名称, 组织层级一, 组织层级三, 定位单元, 服务单元名称]
+    role: dimension
+    semantic_type: org_name
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.93
+    rationale: 组织名称用于基座语义解释和中通层级路径构造。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: metric-amount
+    aliases: [Amount, SalesAmount, MonthlyAmount, Revenue, TotalAmount, 业务金额, 业务金额, 金额, 收入, 总额]
+    role: metric
+    semantic_type: other
+    base_candidate: false
+    scopes: [generic]
+    confidence: 0.98
+    rationale: 金额字段适合作为可聚合指标，不应作为维度或产品基座。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: metric-quantity
+    aliases: [MonthlySales, MonthlyQty, Qty, Quantity, Volume, SalesQty, 业务数量, 业务数量, 数量, 交易量, 体积]
+    role: metric
+    semantic_type: other
+    base_candidate: false
+    scopes: [generic]
+    confidence: 0.97
+    rationale: 数量或业务数量字段适合作为可聚合指标。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: metric-ton
+    aliases: [QtyTon, SalesTon, PlanTon, MonSalesPlan, 吨数, 业务吨数, 计划吨数, 吨量]
+    role: metric
+    semantic_type: other
+    base_candidate: false
+    scopes: [generic]
+    confidence: 0.97
+    rationale: 吨数或吨量字段适合作为可聚合指标。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: metric-liter
+    aliases: [QtyLiter, SalesLiter, MonthlyLiter, 业务升数, 升数, 升量]
+    role: metric
+    semantic_type: other
+    base_candidate: false
+    scopes: [generic]
+    confidence: 0.97
+    rationale: 升数字段适合作为可聚合指标。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: metric-order-count
+    aliases: [OrderCount, Orders, OrderQty, 记录数, 记录数量, 笔数, 交易笔数]
+    role: metric
+    semantic_type: other
+    base_candidate: false
+    scopes: [generic]
+    confidence: 0.96
+    rationale: 记录数量是计数指标；若需去重，仍必须确认记录主键字段。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: ignore-empty
+    aliases: [空字段, 无数据, NULL, null, Empty, Blank]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    scopes: [generic, dimension]
+    confidence: 0.99
+    rationale: 全部为空或无有效值的字段不进入特征和物理结构。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: ignore-row-number
+    aliases: [序号, 行号, RowNo, RowNum, Index, No]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    scopes: [generic, dimension]
+    confidence: 0.9
+    rationale: 展示序号和行号通常不具备业务分析语义。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: audit-created-date
+    aliases: [CreatedDate, CreatedTime, CreateDate, 创建日期, 创建时间]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    feature_layer: none
+    query_uses: []
+    scopes: [generic, dimension]
+    confidence: 0.9
+    rationale: 审计创建时间默认不参与业务查询；如确有业务时序含义，需人工改为时间基座或主干特征。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: audit-modified-date
+    aliases: [ModifiedDate, ModifiedTime, UpdateDate, 更新时间, 修改日期, 修改时间]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    feature_layer: none
+    query_uses: []
+    scopes: [generic, dimension]
+    confidence: 0.9
+    rationale: 审计更新时间默认不进入业务特征；只有业务明确使用时才人工纳入。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: audit-created-by
+    aliases: [CreatedBy, CreateUser, 创建人, 创建用户]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    feature_layer: none
+    query_uses: []
+    scopes: [generic, dimension]
+    confidence: 0.88
+    rationale: 系统审计人员字段通常不用于业务筛选或聚合，默认忽略并保留人工修改入口。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: audit-modified-by
+    aliases: [ModifiedBy, UpdateUser, 修改人, 修改用户]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    feature_layer: none
+    query_uses: []
+    scopes: [generic, dimension]
+    confidence: 0.88
+    rationale: 系统审计人员字段通常不用于业务筛选或聚合，默认忽略并保留人工修改入口。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: common-status
+    aliases: [State, Status, StatusCode, 状态, 状态码, 启用状态]
+    role: dimension
+    semantic_type: other
+    base_candidate: false
+    feature_layer: trunk
+    query_uses: [filter, group_by, sort]
+    scopes: [generic, dimension]
+    confidence: 0.9
+    rationale: 状态字段是通用离散维度，适合筛选、分组和排序；是否作为基座语义需人工确认。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: common-extension-field
+    aliases: [Extend1, Extend2, Extend3, 扩展字段, 自定义字段]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    feature_layer: none
+    query_uses: []
+    scopes: [generic, dimension]
+    confidence: 0.82
+    rationale: 扩展字段缺少稳定业务语义，默认忽略；需要时由用户在确认阶段补充为主干或分枝特征。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: common-index-field
+    aliases: [MaterialIndex, MaterialClassIndex, RowIndex, RowNum, 索引, 行索引]
+    role: ignore
+    semantic_type: other
+    base_candidate: false
+    feature_layer: none
+    query_uses: []
+    scopes: [generic, dimension]
+    confidence: 0.86
+    rationale: 技术索引字段通常不具备业务分析含义，默认不进入基座、主干或分枝结构。
+    source: project_experience
+    status: active
+    added_at: 2026-09-26
+    revision: 1
+
+  - id: organization-region-code
+    aliases: [BigAreaCode, AreaCode, RegionCode, BigAreaId, 组织层级一编码, 组织层级三编码, 区域编码, 大区编码]
+    role: dimension
+    semantic_type: org_code
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.94
+    rationale: 组织层级一/组织层级三等区域编码是组织层级的稳定过滤键，与区域名称列共同承接地点语义。
+    source: project_experience
+    status: active
+    added_at: 2026-09-29
+    revision: 2
+
+  - id: organization-region-name
+    aliases: [BigAreaName, RegionName, AreaName, 组织层级一名称, 组织层级一, 组织层级三名称, 区域名称, 大区名称]
+    role: dimension
+    semantic_type: org_name
+    base_candidate: true
+    scopes: [generic, dimension]
+    confidence: 0.93
+    rationale: 组织层级一与组织层级三名称列用于把自然语言地点翻译成组织层级，落在哪一层由事实表函数依赖推出。
+    source: project_experience
+    status: active
+    added_at: 2026-09-29
+    revision: 2

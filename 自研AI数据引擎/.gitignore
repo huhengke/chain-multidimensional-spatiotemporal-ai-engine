@@ -1,0 +1,34 @@
+# Project-local toolchains and environments
+.cargo-home/
+.toolchains/
+.venv/
+
+# Rust / Python build output
+target/
+*.pyd
+*.dll
+*.lib
+*.exp
+__pycache__/
+.pytest_cache/
+*.py[cod]
+
+# Runtime data stays local. Keep only the repository guidance file.
+data/*
+!data/README.md
+data/generations/
+data/tmp/
+data/acceptance/
+data/benchmark/
+data/shadow/
+data/catalogs/
+data/datasets/
+data/assets/
+runtime/
+benchmarks/results/
+
+# Editor / OS
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store

@@ -1,0 +1,19 @@
+{
+  "name": "chain-wisdom-tree-explainer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "validate": "remotion compositions src/index.ts",
+    "render": "remotion render src/index.ts wisdom-tree-query-explainer ../预览/智慧树查询原理.mp4 --codec=h264 --crf=23 --audio-codec=aac",
+    "still": "remotion still src/index.ts wisdom-tree-query-explainer ../预览/智慧树查询原理.png --frame=920"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.534",
+    "@remotion/renderer": "4.0.534",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "remotion": "4.0.534"
+  }
+}

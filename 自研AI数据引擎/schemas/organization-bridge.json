@@ -1,0 +1,30 @@
+{
+  "contract_version": 1,
+  "semantic": "organization",
+  "resolution": "resolve requested organization names or codes against the selected dataset only",
+  "datasets": {
+    "non_oil_sales": [
+      {"level": "province", "code": "store_province_org_ou_code", "name": "store_province_org_name"},
+      {"level": "city", "code": "store_city_org_ou_code", "name": "store_city_org_name"},
+      {"level": "branch", "code": "store_branch_org_ou_code", "name": "store_branch_org_name"},
+      {"level": "area", "code": "store_area_org_ou_code", "name": "store_area_org_name"},
+      {"level": "station", "code": "store_ou_code", "name": "store_name"}
+    ],
+    "oil_sales_plan": [
+      {"level": "organization", "code": "unitcode", "name": "unitname"}
+    ],
+    "oil_sales_daily": [
+      {"level": "branch", "code": "bigareacode", "name": "bigareaname"},
+      {"level": "county_company", "code": "branchcode", "name": "branchname"},
+      {"level": "area", "code": "areacode", "name": "areaname"},
+      {"level": "station", "code": "oucode", "name": "shortname"}
+    ],
+    "oil_monthly_sales": [
+      {"level": "branch", "code": "bigareacode", "name": "bigareaname"},
+      {"level": "county_company", "code": "branchcode", "name": "branchname"},
+      {"level": "area", "code": "areacode", "name": "areaname"},
+      {"level": "station", "code": "oucode", "name": "shortname"}
+    ]
+  },
+  "failure_policy": "reject unresolved conditions; never remove a requested filter"
+}

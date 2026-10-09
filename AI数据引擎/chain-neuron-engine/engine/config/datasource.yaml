@@ -1,0 +1,47 @@
+# 数据源配置（热加载；密码建议走环境变量 ${ENV_NAME} 占位）
+version: 1
+datasources:
+  - id: mysql_prod
+    name: 生产 MySQL
+    type: mysql
+    enabled: false
+    host: 127.0.0.1
+    port: 3306
+    username: root
+    password: "${MYSQL_PASSWORD}"
+    database: sales
+    table: fact_sales
+    cron: "0 2 * * *"        # 定时拉取（关闭状态）
+
+  - id: postgres_dw
+    name: 数仓 PostgreSQL
+    type: postgres
+    enabled: false
+    host: 127.0.0.1
+    port: 5432
+    username: etl
+    password: "${PG_PASSWORD}"
+    database: dw
+    table: sales_daily
+
+  - id: oracle_erp
+    name: ERP Oracle
+    type: oracle
+    enabled: false
+    host: 127.0.0.1
+    port: 1521
+    username: reader
+    password: "${ORACLE_PASSWORD}"
+    service_name: ORCL
+    table: SALES_DAILY
+
+  - id: mongo_logs
+    name: 日志 MongoDB
+    type: mongo
+    enabled: false
+    host: 127.0.0.1
+    port: 27017
+    username: ""
+    password: "${MONGO_PASSWORD}"
+    database: logs
+    collection: sales_events

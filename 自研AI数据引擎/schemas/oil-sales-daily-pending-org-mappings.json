@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "dataset": "oil_sales_daily_shadow",
+  "recommendations": [
+    {
+      "recommendation_id": "org-universalcode-33351140-v1",
+      "match": {"universalcode": "33351140"},
+      "candidate_mapping": {
+        "oucode": "100045001001010",
+        "shortname": "示例定位单元乙",
+        "branchcode": "100045001",
+        "branchname": "示例组织乙示例行业组织层级一",
+        "areacode": "100045001001",
+        "areaname": "示例组织乙34组织层级三",
+        "bigareacode": "100045",
+        "bigareaname": "示例组织乙"
+      },
+      "evidence": "同一 UniversalCode 在后续有效日报中只出现一条完整组织链；尚未确认历史生效日期",
+      "status": "pending_review"
+    },
+    {
+      "recommendation_id": "org-universalcode-33351141-v1",
+      "match": {"universalcode": "33351141"},
+      "candidate_mapping": {
+        "oucode": "100045001001009",
+        "shortname": "示例定位单元丙",
+        "branchcode": "100045001",
+        "branchname": "示例组织乙示例行业组织层级一",
+        "areacode": "100045001001",
+        "areaname": "示例组织乙34组织层级三",
+        "bigareacode": "100045",
+        "bigareaname": "示例组织乙"
+      },
+      "evidence": "同一 UniversalCode 在后续有效日报中只出现一条完整组织链；尚未确认历史生效日期",
+      "status": "pending_review"
+    },
+    {
+      "recommendation_id": "org-universalcode-33351186-v1",
+      "match": {"universalcode": "33351186"},
+      "candidate_mapping": {
+        "oucode": "100047001001056",
+        "shortname": "示例定位单元甲",
+        "branchcode": "100047001",
+        "branchname": "示例区域甲组织层级二",
+        "areacode": "100047001001",
+        "areaname": "示例区域甲",
+        "bigareacode": "100047",
+        "bigareaname": "示例区域甲组织层级一"
+      },
+      "evidence": "同一 UniversalCode 在后续有效日报中只出现一条完整组织链；尚未确认历史生效日期",
+      "status": "pending_review"
+    }
+  ]
+}

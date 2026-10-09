@@ -1,0 +1,35 @@
+[workspace]
+members = [
+    "crates/cnts-format",
+    "crates/cnts-builder",
+    "crates/cnts-query",
+    "crates/cnts-cli",
+    "crates/cnts-python",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "LicenseRef-Proprietary"
+
+[workspace.dependencies]
+anyhow = "1"
+blake3 = { version = "1", features = ["pure"] }
+chrono = { version = "0.4", default-features = false, features = ["serde", "std"] }
+clap = { version = "4", default-features = false, features = ["derive", "std", "help", "usage", "error-context", "suggestions"] }
+crc32c = "0.6"
+memmap2 = "0.9"
+pyo3 = { version = "0.24", features = ["extension-module", "abi3-py311"] }
+roaring = "0.11"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+uuid = { version = "1", features = ["serde"] }
+windows-sys = { version = "0.59", features = ["Win32_Storage_FileSystem"] }
+zstandard = "0.1.8"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"

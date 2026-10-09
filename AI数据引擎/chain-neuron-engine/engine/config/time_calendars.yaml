@@ -1,0 +1,34 @@
+# 时间基座的可扩展日历语义。需要日历服务或人工维护的事件只声明能力，
+# 不把节日逻辑散落到日报、计划或业务分枝。
+version: 1
+calendars:
+  black_friday:
+    label: 黑色星期五
+    aliases: [黑色星期五, Black Friday]
+    precision: day
+    month_hint: [11]
+  super_saturday:
+    label: 超级星期六
+    aliases: [超级星期六, Super Saturday]
+    precision: day
+    requires_calendar_mapping: true
+  ramadan:
+    label: 斋戒日
+    aliases: [斋戒日, Ramadan]
+    precision: day
+    requires_calendar_mapping: true
+  dragon_boat_festival:
+    label: 端午节
+    aliases: [端午节]
+    precision: day
+    requires_calendar_mapping: true
+  spring_festival:
+    label: 春节
+    aliases: [春节]
+    precision: day
+    requires_calendar_mapping: true
+  national_day:
+    label: 国庆节
+    aliases: [国庆, 国庆节]
+    precision: day
+    month_hint: [10]

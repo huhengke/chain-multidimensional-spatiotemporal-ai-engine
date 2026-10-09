@@ -1,0 +1,40 @@
+{
+  "dataset_id": "oil_sales_daily_shadow",
+  "schema_major": 1,
+  "time_field": "day",
+  "time_format": "%Y-%m-%d",
+  "common_dimensions": [
+    "bigareacode",
+    "branchcode",
+    "areacode",
+    "oucode"
+  ],
+  "outer_dimensions": [
+    "category",
+    "gascode",
+    "universalcode",
+    "salesmode",
+    "checkmode",
+    "shortname",
+    "branchname",
+    "areaname",
+    "bigareaname",
+    "price",
+    "guns",
+    "isoperate",
+    "datatype",
+    "remark"
+  ],
+  "growth_dimensions": [
+    "bigareacode",
+    "branchcode",
+    "areacode",
+    "oucode"
+  ],
+  "growth_threshold": 1000,
+  "metrics": [
+    {"name": "salesvol", "scale": 6, "unit": "ton"},
+    {"name": "qty", "scale": 2, "unit": "liter"},
+    {"name": "amount", "scale": 2, "unit": "CNY"}
+  ]
+}

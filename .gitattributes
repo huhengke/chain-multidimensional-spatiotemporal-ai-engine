@@ -1,0 +1,5 @@
+# Keep generated media and binary engine fixtures out of text diffs.
+*.mp4 binary
+*.png binary
+*.wasm binary
+*.cnts binary

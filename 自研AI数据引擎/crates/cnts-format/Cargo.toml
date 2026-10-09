@@ -1,0 +1,17 @@
+[package]
+name = "cnts-format"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+blake3.workspace = true
+chrono.workspace = true
+crc32c.workspace = true
+memmap2.workspace = true
+roaring.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+zstandard.workspace = true

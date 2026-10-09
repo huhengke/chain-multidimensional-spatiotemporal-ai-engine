@@ -1,0 +1,24 @@
+[
+  {
+    "plan_version": 1,
+    "datasets": ["demo_sales"],
+    "time_range": {"start": "2026-08-01", "end": "2026-08-03"},
+    "filters": [],
+    "group_by": [],
+    "metrics": ["sales_amount", "sales_volume"],
+    "comparisons": [],
+    "merge_mode": "separate",
+    "detail_policy": "allow_fallback"
+  },
+  {
+    "plan_version": 1,
+    "datasets": ["demo_sales"],
+    "time_range": {"start": "2026-08-01", "end": "2026-08-03"},
+    "filters": [{"field": "category", "op": "eq", "value": "类别甲"}],
+    "group_by": ["company"],
+    "metrics": ["sales_amount", "sales_volume"],
+    "comparisons": [],
+    "merge_mode": "separate",
+    "detail_policy": "allow_fallback"
+  }
+]

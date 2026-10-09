@@ -1,0 +1,57 @@
+{
+  "contract_version": 1,
+  "datasets": [
+    {
+      "dataset_id": "oil_master",
+      "kind": "dimension",
+      "table": "dim_oil_master",
+      "key_column": "material_code"
+    },
+    {
+      "dataset_id": "non_oil_sales",
+      "kind": "fact",
+      "table": "fact_non_oil_sales",
+      "key_column": "id",
+      "time_column": "__time",
+      "time_format": "iso_day",
+      "time_granularity": "day",
+      "coherence_groups": [[
+        "store_province_org_ou_code",
+        "store_city_org_ou_code",
+        "store_branch_org_ou_code",
+        "store_area_org_ou_code",
+        "store_ou_code"
+      ]]
+    },
+    {
+      "dataset_id": "oil_sales_plan",
+      "kind": "fact",
+      "table": "fact_oil_sales_plan",
+      "key_column": "id",
+      "time_column": "__time",
+      "time_format": "iso_month",
+      "time_granularity": "month",
+      "coherence_groups": []
+    },
+    {
+      "dataset_id": "oil_sales_daily",
+      "kind": "fact",
+      "table": "fact_oil_sales_daily",
+      "key_column": "id",
+      "time_column": "day",
+      "time_format": "iso_day",
+      "time_granularity": "day",
+      "coherence_groups": [["bigareacode", "branchcode", "areacode", "oucode"]]
+    },
+    {
+      "dataset_id": "oil_monthly_sales",
+      "kind": "fact",
+      "table": "fact_oil_monthly_sales",
+      "key_column": "id",
+      "time_column": "__time",
+      "time_format": "iso_month",
+      "time_granularity": "month",
+      "coherence_groups": [["bigareacode", "branchcode", "areacode", "oucode"]]
+    }
+  ]
+}

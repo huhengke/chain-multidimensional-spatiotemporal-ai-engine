@@ -1,0 +1,101 @@
+{
+  "contract_version": 1,
+  "endpoint": "POST /api/v1/engine/query",
+  "agent_channel": "http",
+  "request_scope": "one immutable runtime profile per request",
+  "dataset_execution": "one pinned generation per logical fact dataset",
+  "orchestration": {
+    "multi_dataset": "engine semantic layer",
+    "yoy_mom": "engine semantic layer",
+    "merge": "engine semantic layer",
+    "single_tree_filter_group_aggregate": "storage adapter"
+  },
+  "no_match": "empty result, never numeric zero",
+  "fallback": "forbidden",
+  "datasets": {
+    "oil_master": {
+      "label": "示例产品基础信息",
+      "aliases": ["产品主数据", "产品信息"],
+      "kind": "dimension",
+      "scope": {"role": "dimension", "business_domain": "oil_master"},
+      "time_granularity": "none",
+      "metrics": {},
+      "order_key": null
+    },
+    "non_oil_sales": {
+      "label": "业务域乙明细",
+      "aliases": ["业务域乙", "业务数据乙", "线上商城", "商城业务"],
+      "kind": "fact",
+      "scope": {
+        "role": "actual",
+        "business_domain": "non_oil",
+        "preferred_for": ["day", "month"],
+        "priority": 100
+      },
+      "time_granularity": "day",
+      "metrics": {
+        "total_amount": "记录总额",
+        "cost_amount": "成本金额",
+        "freight_amount": "运费",
+        "coupon_amount": "优惠券金额",
+        "points_amount": "积分抵扣金额",
+        "discount_amount": "折扣金额",
+        "pay_amount": "支付金额",
+        "freight_discount_amount": "运费折扣",
+        "sale_amount": "业务金额",
+        "sale_tax": "业务税额",
+        "freight_pay_amount": "实付运费",
+        "freight_coupon_amount": "运费优惠券金额",
+        "freight_points_amount": "运费积分金额",
+        "real_amount": "实收金额",
+        "convert_amount": "转换金额"
+      },
+      "order_key": "shopping_order_id"
+    },
+    "oil_sales_plan": {
+      "label": "业务域甲计划",
+      "aliases": ["定位单元业务域甲计划", "业务计划"],
+      "kind": "fact",
+      "scope": {"role": "plan", "business_domain": "oil_plan"},
+      "time_granularity": "month",
+      "metrics": {"monsalesplan": "月业务计划"},
+      "order_key": null
+    },
+    "oil_sales_daily": {
+      "label": "业务域甲日报",
+      "aliases": ["定位单元级业务域甲日报", "日业务"],
+      "kind": "fact",
+      "scope": {
+        "role": "actual",
+        "business_domain": "oil",
+        "preferred_for": ["day"],
+        "priority": 200
+      },
+      "time_granularity": "day",
+      "metrics": {
+        "salesvol": "业务吨数",
+        "qty": "业务升数",
+        "amount": "业务金额"
+      },
+      "order_key": null
+    },
+    "oil_monthly_sales": {
+      "label": "业务域甲月报",
+      "aliases": ["业务数据甲", "月业务"],
+      "kind": "fact",
+      "scope": {
+        "role": "actual",
+        "business_domain": "oil",
+        "preferred_for": ["month"],
+        "priority": 200
+      },
+      "time_granularity": "month",
+      "metrics": {
+        "monthlysales": "业务吨数",
+        "monthlyqty": "业务升数",
+        "monthlyamount": "业务金额"
+      },
+      "order_key": null
+    }
+  }
+}

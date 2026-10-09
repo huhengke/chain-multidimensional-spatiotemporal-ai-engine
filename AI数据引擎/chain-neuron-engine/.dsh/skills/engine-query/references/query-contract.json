@@ -1,0 +1,17 @@
+{
+  "name": "engine_query",
+  "endpoint": "POST /api/v1/engine/query",
+  "request": {
+    "intent": "actual_vs_plan | sales | plan",
+    "period": "current_month | YYYYMM | YYYY年M月",
+    "location": "string|null",
+    "product": "类别甲 | 类别乙 | 类别丙 | category code | null",
+    "metrics": ["actual_qty_ton", "actual_qty_liter", "actual_amount", "plan_qty_ton"]
+  },
+  "rules": [
+    "引擎负责 Decimal 聚合",
+    "模型不得自行求和",
+    "无数据不得改写为 0",
+    "映射失败不得扩大查询范围"
+  ]
+}

@@ -1,0 +1,66 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local runtime control directories
+.runtime/
+.trae/
+acl-recovery/
+
+# Internal process artifacts intentionally excluded from the release repository
+AI数据引擎/历史诊断/
+说明文件/assets/
+
+# Customer source files and runtime data are intentionally local-only
+AI数据引擎/数据源/*
+!AI数据引擎/数据源/README.md
+AI数据引擎/chain-neuron-engine/data/*
+!AI数据引擎/chain-neuron-engine/data/README.md
+Agent/data/*
+!Agent/data/README.md
+自研AI数据引擎/data/*
+!自研AI数据引擎/data/README.md
+
+# Dependencies and build artifacts
+AI数据引擎/chain-neuron-engine/.venv/
+AI数据引擎/chain-neuron-engine/frontend/node_modules/
+AI数据引擎/chain-neuron-engine/frontend/dist/
+Agent/node_modules/
+演示动画/remotion/node_modules/
+演示动画/remotion/.remotion/
+演示动画/remotion/dist/
+演示动画/remotion/.render-temp/
+演示动画/.render-temp/
+自研AI数据引擎/.cargo-home/
+自研AI数据引擎/.toolchains/
+自研AI数据引擎/.venv/
+自研AI数据引擎/target/
+自研AI数据引擎/runtime/
+自研AI数据引擎/benchmarks/results/
+
+# Python, test, and editor artifacts
+**/__pycache__/
+**/.pytest_cache/
+**/*.py[cod]
+**/*.egg-info/
+coverage/
+.coverage
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Process output and database sidecars
+*.log
+*.db-wal
+*.db-shm
+*.db-journal
+
+# Only the curated 720p product animation and cover are released.
+# Local preview renders, frame exports, and alternate encodes stay out of Git.
+演示动画/预览/frames/
+演示动画/预览/*.webm
+演示动画/预览/*-draft.*

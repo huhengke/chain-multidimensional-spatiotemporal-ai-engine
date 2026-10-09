@@ -1,0 +1,17 @@
+{
+  "contract_version": 1,
+  "tree_model": "one fact dataset one wisdom tree",
+  "vertical_axis": "time",
+  "layers": [
+    {"name": "inner_chain", "role": "time and declared common features"},
+    {"name": "middle_store", "role": "materialized aggregates and upward aggregation"},
+    {"name": "outer_chain", "role": "dataset-specific and non-common feature indexes"}
+  ],
+  "dna": "physical topology only, not an additional business query level",
+  "growth": {
+    "rule": "when a time partition exceeds its schema threshold, branch in declared growth-dimension order",
+    "threshold_source": "immutable dataset schema",
+    "threshold_change": "build a new generation"
+  },
+  "route": "inner chain in, middle store through, outer chain out"
+}

@@ -1,0 +1,25 @@
+.topology-page {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.topology-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dde4eb;
+}
+
+.topology-page-header .ant-typography { margin: 0; }
+
+.topology-page-loading {
+  min-height: 520px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+}

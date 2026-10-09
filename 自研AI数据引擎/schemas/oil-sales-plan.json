@@ -1,0 +1,25 @@
+{
+  "dataset_id": "oil_sales_plan",
+  "schema_major": 1,
+  "time_field": "day",
+  "time_format": "%Y-%m-%d",
+  "common_dimensions": [
+    "unitcode",
+    "category",
+    "gascode"
+  ],
+  "outer_dimensions": [
+    "unitname",
+    "distributionchannel",
+    "universalcode"
+  ],
+  "growth_dimensions": [
+    "unitcode",
+    "category",
+    "gascode"
+  ],
+  "growth_threshold": 1000,
+  "metrics": [
+    {"name": "monsalesplan", "scale": 6, "unit": "ton"}
+  ]
+}

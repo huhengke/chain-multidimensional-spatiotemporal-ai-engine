@@ -1,0 +1,6 @@
+node_modules/
+data/sessions.json
+data/*.tmp
+*.log
+.env
+coverage/

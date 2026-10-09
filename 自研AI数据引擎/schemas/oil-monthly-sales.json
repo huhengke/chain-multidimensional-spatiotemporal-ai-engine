@@ -1,0 +1,41 @@
+{
+  "dataset_id": "oil_monthly_sales",
+  "schema_major": 1,
+  "time_field": "day",
+  "time_format": "%Y-%m-%d",
+  "common_dimensions": [
+    "bigareacode",
+    "branchcode",
+    "areacode",
+    "oucode",
+    "category",
+    "gascode"
+  ],
+  "outer_dimensions": [
+    "universalcode",
+    "shortname",
+    "salesmode",
+    "checkmode",
+    "distributionchannel",
+    "branchname",
+    "areaname",
+    "bigareaname",
+    "companynature",
+    "remark",
+    "lg_areacode"
+  ],
+  "growth_dimensions": [
+    "bigareacode",
+    "branchcode",
+    "areacode",
+    "oucode",
+    "category",
+    "gascode"
+  ],
+  "growth_threshold": 1000,
+  "metrics": [
+    {"name": "monthlysales", "scale": 6, "unit": "ton"},
+    {"name": "monthlyqty", "scale": 2, "unit": "liter"},
+    {"name": "monthlyamount", "scale": 2, "unit": "CNY"}
+  ]
+}
